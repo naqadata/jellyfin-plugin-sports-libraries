@@ -1,0 +1,11 @@
+[
+  {
+    "guid": "c3ee83f8-0f0b-4e78-a7e7-a9840e10f043",
+    "name": "Sports Libraries",
+    "description": "Declares existing Jellyfin libraries as Sports for compatible clients.",
+    "overview": "Lets administrators select existing libraries that Roku and tvOS can present as Sports.",
+    "owner": "naqadata",
+    "category": "General",
+    "versions": []
+  }
+]

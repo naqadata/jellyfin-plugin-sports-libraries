@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Sports Libraries</title></head>
+<body><div id="SportsLibrariesConfigPage" data-role="page" class="page type-interior pluginConfigurationPage">
+<div data-role="content"><div class="content-primary"><form id="SportsLibrariesConfigForm">
+<div class="inputContainer"><div class="fieldDescription">Choose the existing libraries that clients should present as Sports. Nothing is renamed or re-scanned.</div><div id="sportsLibraryChoices"></div></div>
+<button is="emby-button" type="submit" class="raised button-submit block emby-button"><span>Save</span></button>
+</form></div></div>
+<script>
+var SportsLibrariesConfig={pluginUniqueId:'c3ee83f8-0f0b-4e78-a7e7-a9840e10f043'};
+function renderLibraries(libraries, selected) { var root=document.querySelector('#sportsLibraryChoices'); root.innerHTML=''; libraries.forEach(function(library) { var id=library.ItemId || library.itemId || library.Id || library.id; if(!id) return; var label=document.createElement('label'); label.className='emby-checkbox-label'; var box=document.createElement('input'); box.type='checkbox'; box.className='sportsLibraryChoice'; box.value=id; box.checked=selected.indexOf(id)>=0; label.appendChild(box); label.appendChild(document.createTextNode(' '+(library.Name || library.name)+' ('+(library.CollectionType || library.collectionType || 'folder')+')')); root.appendChild(label); root.appendChild(document.createElement('br')); }); }
+document.querySelector('#SportsLibrariesConfigPage').addEventListener('pageshow',function(){ Dashboard.showLoadingMsg(); Promise.all([ApiClient.getPluginConfiguration(SportsLibrariesConfig.pluginUniqueId),ApiClient.getVirtualFolders()]).then(function(values){ renderLibraries(values[1], values[0].SportsLibraryIds || []); Dashboard.hideLoadingMsg(); }); });
+document.querySelector('#SportsLibrariesConfigForm').addEventListener('submit',function(e){ Dashboard.showLoadingMsg(); ApiClient.getPluginConfiguration(SportsLibrariesConfig.pluginUniqueId).then(function(config){ config.SportsLibraryIds=Array.prototype.map.call(document.querySelectorAll('.sportsLibraryChoice:checked'),function(box){return box.value;}); return ApiClient.updatePluginConfiguration(SportsLibrariesConfig.pluginUniqueId,config); }).then(Dashboard.processPluginConfigurationUpdateResult); e.preventDefault(); });
+</script></div></body></html>
